@@ -5,15 +5,15 @@ const Schema = mongoose.Schema;
 // Convert strings to objectIDs?
 // Or, we use UUID, convert to objectID, then send to client?
 // How can we assign IDs to our passenger and driver schemas?
+// Probably OK to have everything contained in the events collection since everything in each event is self-contained and won't change anywhere else
+
 const passengerSchema = new Schema({
-  _id: mongoose.ObjectId,
   name: String,
   nickname: String,
 });
 
 // Do you need to manually set an ID for subdocuments?
 const driverSchema = new Schema({
-  _id: mongoose.ObjectId,
   name: String,
   nickname: String,
   seats: Number,
@@ -29,5 +29,6 @@ const eventSchema = new Schema({
 });
 
 const Events = mongoose.model('Event', eventSchema);
+const Drivers = mongoose.model('Driver', driverSchema);
 
-module.exports = Events;
+module.exports = { Events, Drivers };
