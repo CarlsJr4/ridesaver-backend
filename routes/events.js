@@ -31,20 +31,28 @@ router.post('/:id/newdriver', async (req, res) => {
   const newDriver = new Drivers({
     name: 'Carl D',
     nickname: 'CarlsJr',
+    seats: 6,
   });
   event.drivers.push(newDriver);
   event.save();
   res.send(event);
 });
 
-// POST new blank event (need to include a default driver that holds free passengers)
-// How to handle unique driver scenario?
+// POST new blank event
 router.post('/new', async (req, res) => {
   const newEvent = new Events({
     name: 'Ice Skating With Friends',
     author: 'Carl D.',
     drivers: [],
   });
+  // Include a default subdocument for the passenger pool
+  const passengerPool = new Drivers({
+    isPassengerPool: true,
+    name: null,
+    nickname: null,
+    seats: null,
+  });
+  newEvent.drivers.push(passengerPool);
   const event = await newEvent.save();
   res.send(event);
 });
