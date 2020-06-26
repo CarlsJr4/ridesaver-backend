@@ -24,5 +24,6 @@ const eventSchema = new Schema({
 
 const Events = mongoose.model('Event', eventSchema);
 const Drivers = mongoose.model('Driver', driverSchema);
+const Passengers = mongoose.model('Passenger', passengerSchema);
 
-module.exports = { Events, Drivers };
+module.exports = { Events, Drivers, Passengers };

@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { Events, Drivers } = require('../models/events');
+const { Events, Drivers, Passengers } = require('../models/events');
 
 // Routes to implement
 // GET all events
@@ -12,6 +12,10 @@ const { Events, Drivers } = require('../models/events');
 // Also need to implement validation and stuff
 // Then, config and new routes and stuff
 // And also error handling
+
+// Eventually, it will get tiring to have to pull up the event with specific ID each time.
+// How can we automate this?
+// Middleware?
 
 // GET all events
 router.get('/', async (req, res) => {
@@ -25,6 +29,20 @@ router.get('/:id', async (req, res) => {
   res.send(event);
 });
 
+// POST new passenger to pool
+router.post('/:id/newpassenger', async (req, res) => {
+  const event = await Events.findById(req.params.id);
+  const newPassenger = new Passengers({
+    name: 'Carl D',
+    nickname: 'CarlsJr3',
+  });
+  // There's probably a cleaner way to do this using Mongoose syntax, but this vanilla solution is OK for now
+  const passengerPool = event.drivers.find(element => element.isPassengerPool);
+  passengerPool.passengers.push(newPassenger);
+  event.save();
+  res.send(newPassenger);
+});
+
 // POST new driver
 router.post('/:id/newdriver', async (req, res) => {
   const event = await Events.findById(req.params.id);
@@ -35,7 +53,7 @@ router.post('/:id/newdriver', async (req, res) => {
   });
   event.drivers.push(newDriver);
   event.save();
-  res.send(event);
+  res.send(newDriver);
 });
 
 // POST new blank event
