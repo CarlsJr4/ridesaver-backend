@@ -8,20 +8,10 @@ const { Events, Drivers, Passengers } = require('../models/events');
 // Nested routers?
 // Router.route() to save space on basic CRUD operations
 
-// Is it possible to compress these so that I dont have to write as many routes?
-// Update operators??
-
-// Use middleware to store a DB object in the request body?
-
-// How can we write our routes so that we dont have to keep repeating ourselves whenever we make an update
-// to passengers or drivers?
-// On paper: Separate routes by event, driver, passenger methods
-
 // PUT passengers between columns
 // PUT event details
 // PUT driver details
 // PUT passenger details
-// DELETE event
 // DELETE driver
 // DELETE passenger
 
@@ -32,9 +22,8 @@ const { Events, Drivers, Passengers } = require('../models/events');
 // Then, config and new routes and stuff
 // And also error handling
 
-// How to make code more DRY?
-
 // Attach event to request body for re-use in endpoints
+// Should I put this in its own module?
 router.param('id', async (req, res, next, id) => {
   try {
     const event = await Events.findById(id);
@@ -45,63 +34,59 @@ router.param('id', async (req, res, next, id) => {
   next();
 });
 
-// GET all events
-router.get('/', async (req, res) => {
-  const allEvents = await Events.find();
-  res.send(allEvents);
-});
-
-// POST new blank event
-router.post('/', async (req, res) => {
-  const newEvent = new Events({
-    name: 'Ice Skating With Friends',
-    author: 'Carl D.',
-    drivers: [],
-  });
-  // Include a default subdocument for the passenger pool
-  const passengerPool = new Drivers({
-    isPassengerPool: true,
-    name: null,
-    nickname: null,
-    seats: null,
-  });
-  newEvent.drivers.push(passengerPool);
-  const event = await newEvent.save();
-  res.send(event);
-});
-
-// GET event with specific ID
-router.get('/:id', async (req, res) => {
-  res.send(req.event);
-});
-
-// PATCH event information
-router.patch('/:id', async (req, res) => {
-  try {
-    const event = await Events.findByIdAndUpdate(
-      req.params.id,
-      {
-        name: 'Ice Skating With Friends',
-      },
-      {
-        new: true,
-      }
-    );
+router
+  .route('/')
+  .get(async (req, res) => {
+    const allEvents = await Events.find();
+    res.send(allEvents);
+  })
+  .post(async (req, res) => {
+    const newEvent = new Events({
+      name: 'Ice Skating With Friends',
+      author: 'Carl D.',
+      drivers: [],
+    });
+    // Include a default subdocument for the passenger pool
+    const passengerPool = new Drivers({
+      isPassengerPool: true,
+      name: null,
+      nickname: null,
+      seats: null,
+    });
+    newEvent.drivers.push(passengerPool);
+    const event = await newEvent.save();
     res.send(event);
-  } catch {
-    console.log('error');
-  }
-});
+  });
 
-// DELETE entire event
-router.delete('/:id', async (req, res) => {
-  try {
-    await Events.findByIdAndDelete(req.params.id);
-    res.send(await Events.find());
-  } catch {
-    console.log('err');
-  }
-});
+router
+  .route('/:id')
+  .get(async (req, res) => {
+    res.send(req.event);
+  })
+  .patch(async (req, res) => {
+    try {
+      const event = await Events.findByIdAndUpdate(
+        req.params.id,
+        {
+          name: 'Ice Skating With Friends',
+        },
+        {
+          new: true,
+        }
+      );
+      res.send(event);
+    } catch {
+      console.log('error');
+    }
+  })
+  .delete(async (req, res) => {
+    try {
+      await Events.findByIdAndDelete(req.params.id);
+      res.send(await Events.find());
+    } catch {
+      console.log('err');
+    }
+  });
 
 // POST new passenger to pool
 router.post('/:id/passengers', async (req, res) => {
