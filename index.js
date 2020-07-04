@@ -17,7 +17,7 @@ mongoose.set('useFindAndModify', false);
 
 // Middleware
 app.use('/api/events', eventsRouter);
-// include another middleware for /api/events/:id/drivers/:id?
+// include another middleware for /api/events/:event_id/drivers/:event_id?
 
 // Etc
 app.get('/', function (req, res) {

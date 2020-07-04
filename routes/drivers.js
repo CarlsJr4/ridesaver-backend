@@ -17,4 +17,6 @@ driverRouter.post('/', async (req, res) => {
   res.send(newDriver);
 });
 
+driverRouter.delete('/:driver_id', async (req, res) => {});
+
 module.exports = driverRouter;

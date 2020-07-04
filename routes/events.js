@@ -10,11 +10,11 @@ const { Events, Drivers } = require('../models/events');
 // Error handling
 
 // Nested routers to split functionality to different modules
-eventRouter.use('/:id/drivers', driverRouter);
-eventRouter.use('/:id/passengers', passengerRouter);
+eventRouter.use('/:event_id/drivers', driverRouter);
+eventRouter.use('/:event_id/passengers', passengerRouter);
 
 // So that this event can be accessed by all nested routes
-eventRouter.param('id', async (req, res, next, id) => {
+eventRouter.param('event_id', async (req, res, next, id) => {
   try {
     const event = await Events.findById(id);
     req.event = event;
@@ -50,7 +50,7 @@ eventRouter
 
 // Routes that require a specific event ID
 eventRouter
-  .route('/:id')
+  .route('/:event_id')
   .get(async (req, res) => {
     res.send(req.event);
   })
