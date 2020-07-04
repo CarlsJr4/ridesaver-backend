@@ -2,7 +2,6 @@ const express = require('express');
 const { Drivers } = require('../models/events');
 const driverRouter = express.Router({ mergeParams: true });
 
-// DELETE driver
 // PUT driver details
 
 driverRouter.post('/', async (req, res) => {
@@ -17,6 +16,15 @@ driverRouter.post('/', async (req, res) => {
   res.send(newDriver);
 });
 
-driverRouter.delete('/:driver_id', async (req, res) => {});
+driverRouter.delete('/:driver_id', async (req, res) => {
+  try {
+    const event = req.event;
+    event.drivers.id(req.params.driver_id).remove();
+    event.save();
+    res.send(event.drivers);
+  } catch {
+    res.send('driver not found');
+  }
+});
 
 module.exports = driverRouter;
