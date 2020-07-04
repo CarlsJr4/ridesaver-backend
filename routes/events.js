@@ -1,6 +1,7 @@
 const express = require('express');
 const eventRouter = express.Router();
 const driverRouter = require('./drivers');
+const newPassengerRouter = require('./newPassenger');
 const passengerRouter = require('./passengers');
 const { Events, Drivers } = require('../models/events');
 
@@ -12,7 +13,8 @@ const { Events, Drivers } = require('../models/events');
 
 // Nested routers to split functionality to different modules
 eventRouter.use('/:event_id/drivers', driverRouter);
-eventRouter.use('/:event_id/passengers', passengerRouter);
+eventRouter.use('/:event_id/newpassenger', newPassengerRouter);
+eventRouter.use('/:event_id/drivers/:driver_id/passengers', passengerRouter);
 
 // So that this event can be accessed by all nested routes
 eventRouter.param('event_id', async (req, res, next, id) => {
