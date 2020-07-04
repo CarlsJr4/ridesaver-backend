@@ -1,30 +1,24 @@
 const express = require('express');
-const router = express.Router();
-const { Events, Drivers, Passengers } = require('../models/events');
+const eventRouter = express.Router();
+const driverRouter = require('./drivers');
+const passengerRouter = require('./passengers');
+const { Events, Drivers } = require('../models/events');
 
 // Routes to implement:
-
-// The challenge of this app will be figuring out how to handle the various update operations
-// Nested routers?
-// Router.route() to save space on basic CRUD operations
-
 // PUT passengers between columns
-// PUT event details
 // PUT driver details
 // PUT passenger details
 // DELETE driver
 // DELETE passenger
 
-// This module will get really packed soon
-// How can we split this module into sub-modules?
-
 // Also need to implement validation and stuff
 // Then, config and new routes and stuff
 // And also error handling
 
-// Attach event to request body for re-use in endpoints
-// Should I put this in its own module?
-router.param('id', async (req, res, next, id) => {
+eventRouter.use('/:id/drivers', driverRouter);
+eventRouter.use('/:id/passengers', passengerRouter);
+
+eventRouter.param('id', async (req, res, next, id) => {
   try {
     const event = await Events.findById(id);
     req.event = event;
@@ -34,7 +28,8 @@ router.param('id', async (req, res, next, id) => {
   next();
 });
 
-router
+// Default route
+eventRouter
   .route('/')
   .get(async (req, res) => {
     const allEvents = await Events.find();
@@ -58,7 +53,8 @@ router
     res.send(event);
   });
 
-router
+// Routes that require a specific event ID
+eventRouter
   .route('/:id')
   .get(async (req, res) => {
     res.send(req.event);
@@ -88,31 +84,4 @@ router
     }
   });
 
-// POST new passenger to pool
-router.post('/:id/passengers', async (req, res) => {
-  const event = req.event;
-  const newPassenger = new Passengers({
-    name: 'Carl D',
-    nickname: 'CarlsJr3',
-  });
-  // There's probably a cleaner way to do this using Mongoose syntax, but this vanilla solution is OK for now
-  const passengerPool = event.drivers.find(element => element.isPassengerPool);
-  passengerPool.passengers.push(newPassenger);
-  event.save();
-  res.send(newPassenger);
-});
-
-// POST new driver
-router.post('/:id/drivers', async (req, res) => {
-  const event = req.event;
-  const newDriver = new Drivers({
-    name: 'Carl D',
-    nickname: 'CarlsJr',
-    seats: 6,
-  });
-  event.drivers.push(newDriver);
-  event.save();
-  res.send(newDriver);
-});
-
-module.exports = router;
+module.exports = eventRouter;
