@@ -4,20 +4,16 @@ const driverRouter = require('./drivers');
 const passengerRouter = require('./passengers');
 const { Events, Drivers } = require('../models/events');
 
-// Routes to implement:
-// PUT passengers between columns
-// PUT driver details
-// PUT passenger details
-// DELETE driver
-// DELETE passenger
+// TODO:
+// Validation
+// Config
+// Error handling
 
-// Also need to implement validation and stuff
-// Then, config and new routes and stuff
-// And also error handling
-
+// Nested routers to split functionality to different modules
 eventRouter.use('/:id/drivers', driverRouter);
 eventRouter.use('/:id/passengers', passengerRouter);
 
+// So that this event can be accessed by all nested routes
 eventRouter.param('id', async (req, res, next, id) => {
   try {
     const event = await Events.findById(id);
@@ -28,7 +24,6 @@ eventRouter.param('id', async (req, res, next, id) => {
   next();
 });
 
-// Default route
 eventRouter
   .route('/')
   .get(async (req, res) => {
@@ -41,7 +36,7 @@ eventRouter
       author: 'Carl D.',
       drivers: [],
     });
-    // Include a default subdocument for the passenger pool
+    // Default subdocument for the passenger pool
     const passengerPool = new Drivers({
       isPassengerPool: true,
       name: null,
@@ -59,6 +54,7 @@ eventRouter
   .get(async (req, res) => {
     res.send(req.event);
   })
+  // For changing event title and date/time
   .patch(async (req, res) => {
     try {
       const event = await Events.findByIdAndUpdate(

@@ -2,6 +2,9 @@ const express = require('express');
 const { Drivers } = require('../models/events');
 const driverRouter = express.Router({ mergeParams: true });
 
+// DELETE driver
+// PUT driver details
+
 driverRouter.post('/', async (req, res) => {
   const event = req.event;
   const newDriver = new Drivers({
