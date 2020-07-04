@@ -75,7 +75,23 @@ router.get('/:id', async (req, res) => {
   res.send(req.event);
 });
 
-// PUT event information
+// PATCH event information
+router.patch('/:id', async (req, res) => {
+  try {
+    const event = await Events.findByIdAndUpdate(
+      req.params.id,
+      {
+        name: 'Ice Skating With Friends',
+      },
+      {
+        new: true,
+      }
+    );
+    res.send(event);
+  } catch {
+    console.log('error');
+  }
+});
 
 // DELETE entire event
 
