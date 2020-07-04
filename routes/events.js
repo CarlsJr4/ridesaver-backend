@@ -34,6 +34,17 @@ const { Events, Drivers, Passengers } = require('../models/events');
 
 // How to make code more DRY?
 
+// Attach event to request body for re-use in endpoints
+router.param('id', async (req, res, next, id) => {
+  try {
+    const event = await Events.findById(id);
+    req.event = event;
+  } catch {
+    console.log('Event not found!');
+  }
+  next();
+});
+
 // GET all events
 router.get('/', async (req, res) => {
   const allEvents = await Events.find();
@@ -61,13 +72,16 @@ router.post('/', async (req, res) => {
 
 // GET event with specific ID
 router.get('/:id', async (req, res) => {
-  const event = await Events.findById(req.params.id);
-  res.send(event);
+  res.send(req.event);
 });
+
+// PUT event information
+
+// DELETE entire event
 
 // POST new passenger to pool
 router.post('/:id/passengers', async (req, res) => {
-  const event = await Events.findById(req.params.id);
+  const event = req.event;
   const newPassenger = new Passengers({
     name: 'Carl D',
     nickname: 'CarlsJr3',
@@ -81,7 +95,7 @@ router.post('/:id/passengers', async (req, res) => {
 
 // POST new driver
 router.post('/:id/drivers', async (req, res) => {
-  const event = await Events.findById(req.params.id);
+  const event = req.event;
   const newDriver = new Drivers({
     name: 'Carl D',
     nickname: 'CarlsJr',
