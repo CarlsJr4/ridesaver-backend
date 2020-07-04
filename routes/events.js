@@ -94,6 +94,14 @@ router.patch('/:id', async (req, res) => {
 });
 
 // DELETE entire event
+router.delete('/:id', async (req, res) => {
+  try {
+    await Events.findByIdAndDelete(req.params.id);
+    res.send(await Events.find());
+  } catch {
+    console.log('err');
+  }
+});
 
 // POST new passenger to pool
 router.post('/:id/passengers', async (req, res) => {
