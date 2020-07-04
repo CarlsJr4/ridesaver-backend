@@ -2,20 +2,37 @@ const express = require('express');
 const router = express.Router();
 const { Events, Drivers, Passengers } = require('../models/events');
 
-// Routes to implement
-// GET all events
-// GET event of specific ID
+// Routes to implement:
+
+// The challenge of this app will be figuring out how to handle the various update operations
+// Nested routers?
+// Router.route() to save space on basic CRUD operations
+
+// Is it possible to compress these so that I dont have to write as many routes?
+// Update operators??
+
+// Use middleware to store a DB object in the request body?
+
+// How can we write our routes so that we dont have to keep repeating ourselves whenever we make an update
+// to passengers or drivers?
+// On paper: Separate routes by event, driver, passenger methods
+
+// PUT passengers between columns
+// PUT event details
+// PUT driver details
+// PUT passenger details
 // DELETE event
-// PUT new driver
-// PUT new passenger
+// DELETE driver
+// DELETE passenger
+
+// This module will get really packed soon
+// How can we split this module into sub-modules?
 
 // Also need to implement validation and stuff
 // Then, config and new routes and stuff
 // And also error handling
 
-// Eventually, it will get tiring to have to pull up the event with specific ID each time.
-// How can we automate this?
-// Middleware?
+// How to make code more DRY?
 
 // GET all events
 router.get('/', async (req, res) => {
@@ -23,41 +40,8 @@ router.get('/', async (req, res) => {
   res.send(allEvents);
 });
 
-// GET event with specific ID
-router.get('/:id', async (req, res) => {
-  const event = await Events.findById(req.params.id);
-  res.send(event);
-});
-
-// POST new passenger to pool
-router.post('/:id/newpassenger', async (req, res) => {
-  const event = await Events.findById(req.params.id);
-  const newPassenger = new Passengers({
-    name: 'Carl D',
-    nickname: 'CarlsJr3',
-  });
-  // There's probably a cleaner way to do this using Mongoose syntax, but this vanilla solution is OK for now
-  const passengerPool = event.drivers.find(element => element.isPassengerPool);
-  passengerPool.passengers.push(newPassenger);
-  event.save();
-  res.send(newPassenger);
-});
-
-// POST new driver
-router.post('/:id/newdriver', async (req, res) => {
-  const event = await Events.findById(req.params.id);
-  const newDriver = new Drivers({
-    name: 'Carl D',
-    nickname: 'CarlsJr',
-    seats: 6,
-  });
-  event.drivers.push(newDriver);
-  event.save();
-  res.send(newDriver);
-});
-
 // POST new blank event
-router.post('/new', async (req, res) => {
+router.post('/', async (req, res) => {
   const newEvent = new Events({
     name: 'Ice Skating With Friends',
     author: 'Carl D.',
@@ -73,6 +57,39 @@ router.post('/new', async (req, res) => {
   newEvent.drivers.push(passengerPool);
   const event = await newEvent.save();
   res.send(event);
+});
+
+// GET event with specific ID
+router.get('/:id', async (req, res) => {
+  const event = await Events.findById(req.params.id);
+  res.send(event);
+});
+
+// POST new passenger to pool
+router.post('/:id/passengers', async (req, res) => {
+  const event = await Events.findById(req.params.id);
+  const newPassenger = new Passengers({
+    name: 'Carl D',
+    nickname: 'CarlsJr3',
+  });
+  // There's probably a cleaner way to do this using Mongoose syntax, but this vanilla solution is OK for now
+  const passengerPool = event.drivers.find(element => element.isPassengerPool);
+  passengerPool.passengers.push(newPassenger);
+  event.save();
+  res.send(newPassenger);
+});
+
+// POST new driver
+router.post('/:id/drivers', async (req, res) => {
+  const event = await Events.findById(req.params.id);
+  const newDriver = new Drivers({
+    name: 'Carl D',
+    nickname: 'CarlsJr',
+    seats: 6,
+  });
+  event.drivers.push(newDriver);
+  event.save();
+  res.send(newDriver);
 });
 
 module.exports = router;

@@ -16,10 +16,12 @@ db.once('open', function () {
 
 // Middleware
 app.use('/api/events', eventsRouter);
+// include another middleware for /api/events/:id/drivers/:id?
 
 // Etc
 app.get('/', function (req, res) {
   res.send('Hello World');
 });
 
+// Need to listen for environment variable port OR fallback to port 3000
 app.listen(3000);
