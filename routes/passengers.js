@@ -15,7 +15,15 @@ const passengerRouter = express.Router({ mergeParams: true });
 
 // Endpoints for managing specific passengers
 passengerRouter.delete('/:passenger_id', async (req, res) => {
-  res.send('foo');
+  try {
+    const event = req.event;
+    const driver = event.drivers.id(req.params.driver_id);
+    driver.passengers.id(req.params.passenger_id).remove();
+    event.save();
+    res.send(driver);
+  } catch {
+    res.send('passenger not found');
+  }
 });
 
 module.exports = passengerRouter;
