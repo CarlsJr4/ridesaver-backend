@@ -7,9 +7,9 @@ const { Events, Drivers } = require('../models/events');
 
 // TODO:
 // Validation
+// Sync front-end with backend
 // Config
 // Error handling
-// Sync front-end with backend
 
 // Nested routers to split functionality to different modules
 eventRouter.use('/:event_id/drivers', driverRouter);

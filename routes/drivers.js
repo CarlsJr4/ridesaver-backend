@@ -64,8 +64,16 @@ driverRouter
   });
 
 // A route to handle re-ordering a specific driver
-// driverRouter.put('/:driver_id/reorder', async (req, res) => {
-//   res.send('foo');
-// });
+driverRouter.put('/:driver_id/reorder', async (req, res) => {
+  try {
+    const event = req.event;
+    const driver = event.drivers.id(req.params.driver_id);
+    driver.passengers = []; // Replace this with the new array to be sent
+    event.save();
+    res.send(event.drivers);
+  } catch {
+    res.send('driver not found');
+  }
+});
 
 module.exports = driverRouter;
