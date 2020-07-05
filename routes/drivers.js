@@ -25,7 +25,7 @@ driverRouter.put('/transfer', async (req, res) => {
     const endColumnPassengers = [
       { name: 'Carl D', nickname: 'CarlsJr3', _id: '5ef53c4e41f7840ac8e6f135' },
     ];
-    const startDriver = event.drivers.id(columnIdStart).passengers;
+    const startDriver = event.drivers.id(columnIdStart);
     const endDriver = event.drivers.id(columnIdEnd);
     startDriver.passengers = startColumnPassengers;
     endDriver.passengers = endColumnPassengers;
