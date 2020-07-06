@@ -43,9 +43,9 @@ eventRouter
     // Default subdocument for the passenger pool
     const passengerPool = new Drivers({
       isPassengerPool: true,
-      name: null,
-      nickname: null,
-      seats: null,
+      name: 'pool',
+      nickname: 'pool',
+      seats: 1,
     });
     newEvent.drivers.push(passengerPool);
     const event = await newEvent.save();

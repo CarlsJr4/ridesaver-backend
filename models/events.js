@@ -2,23 +2,22 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const passengerSchema = new Schema({
-  name: String,
+  name: { type: String, required: true },
   nickname: String,
 });
 
 const driverSchema = new Schema({
   isPassengerPool: Boolean,
-  name: String,
+  name: { type: String, required: true },
   nickname: String,
-  seats: Number,
+  seats: { type: Number, required: true, min: 1 },
   passengers: [passengerSchema],
 });
 
-// Play around with this basic document for now!
 const eventSchema = new Schema({
-  date: { type: Date, default: Date.now },
-  name: String,
-  author: String,
+  date: { type: Date, default: Date.now, required: true },
+  name: { type: String, required: true },
+  author: { type: String, required: true },
   drivers: [driverSchema],
 });
 
