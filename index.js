@@ -1,5 +1,7 @@
 const express = require('express');
 const app = express();
+const bodyParser = require('body-parser');
+const cors = require('cors');
 const mongoose = require('mongoose');
 const eventsRouter = require('./routes/events');
 
@@ -16,8 +18,10 @@ db.once('open', function () {
 mongoose.set('useFindAndModify', false);
 
 // Middleware
+app.use(express.json());
+app.use(cors());
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use('/api/events', eventsRouter);
-// include another middleware for /api/events/:event_id/drivers/:event_id?
 
 // Etc
 app.get('/', function (req, res) {
@@ -25,4 +29,4 @@ app.get('/', function (req, res) {
 });
 
 // Need to listen for environment variable port OR fallback to port 3000
-app.listen(3000);
+app.listen(process.env.PORT || 3000);
