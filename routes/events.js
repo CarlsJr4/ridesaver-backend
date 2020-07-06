@@ -6,7 +6,6 @@ const passengerRouter = require('./passengers');
 const { Events, Drivers } = require('../models/events');
 
 // TODO:
-// Validation
 // Sync front-end with backend
 // Config
 // Error handling
