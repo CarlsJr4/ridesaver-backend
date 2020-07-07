@@ -1,7 +1,7 @@
 const express = require('express');
+const cors = require('cors');
 const app = express();
 const bodyParser = require('body-parser');
-const cors = require('cors');
 const mongoose = require('mongoose');
 const eventsRouter = require('./routes/events');
 
@@ -18,8 +18,8 @@ db.once('open', function () {
 mongoose.set('useFindAndModify', false);
 
 // Middleware
-app.use(express.json());
 app.use(cors());
+app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use('/api/events', eventsRouter);
 
