@@ -1,7 +1,8 @@
 const express = require('express');
-const { Drivers } = require('../models/events');
+const { Drivers, Passengers } = require('../models/events');
 const driverRouter = express.Router({ mergeParams: true });
 const _ = require('lodash');
+const newPassengerRouter = require('./newPassenger');
 
 // Create a new driver
 driverRouter.post('/', async (req, res) => {
@@ -42,6 +43,22 @@ driverRouter.put('/transfer', async (req, res) => {
 // Routes involving making changes to a specific driver
 driverRouter
   .route('/:driver_id')
+  .post(async (req, res) => {
+    try {
+      const event = req.event;
+      const driver = event.drivers.id(req.params.driver_id);
+      const newPassenger = new Passengers(
+        _.pick(req.body, ['name', 'nickname'])
+      );
+      driver.passengers.push(newPassenger);
+      // push to passenger list
+      event.save();
+      res.status(200).send(newPassenger);
+      // Send the new passenger
+    } catch (err) {
+      console.log(err);
+    }
+  })
   .put(async (req, res) => {
     try {
       const event = req.event;
