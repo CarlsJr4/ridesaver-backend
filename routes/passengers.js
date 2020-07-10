@@ -9,10 +9,9 @@ passengerRouter
       const event = req.event;
       const driver = event.drivers.id(req.params.driver_id);
       const passenger = driver.passengers.id(req.params.passenger_id);
-      // Can probably index these fields, then manually fill in the new ones
-      passenger.name = 'Spongebob';
-      passenger.nickname = 'Squarepants';
-      passenger._id = req.params.passenger_id;
+      const { name, nickname } = req.body;
+      name && (passenger.name = name);
+      nickname && (passenger.nickname = nickname);
       event.save();
       res.send(passenger);
     } catch {
