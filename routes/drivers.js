@@ -23,16 +23,11 @@ driverRouter.post('/', async (req, res) => {
 driverRouter.put('/transfer', async (req, res) => {
   try {
     const event = req.event;
-    const columnIdStart = '5ef538186635ff06cc86258c';
-    const columnIdEnd = '5ef5386d2cd03b10a4dd4a17';
-    const startColumnPassengers = [];
-    const endColumnPassengers = [
-      { name: 'Carl D', nickname: 'CarlsJr3', _id: '5ef53c4e41f7840ac8e6f135' },
-    ];
-    const startDriver = event.drivers.id(columnIdStart);
-    const endDriver = event.drivers.id(columnIdEnd);
-    startDriver.passengers = startColumnPassengers;
-    endDriver.passengers = endColumnPassengers;
+    const { startId, destId, sourcePassengers, destPassengers } = req.body;
+    const startDriver = event.drivers.id(startId);
+    const endDriver = event.drivers.id(destId);
+    startDriver.passengers = sourcePassengers;
+    endDriver.passengers = destPassengers;
     event.save();
     res.send(event.drivers);
   } catch {
@@ -47,6 +42,7 @@ driverRouter
     try {
       const event = req.event;
       const driver = event.drivers.id(req.params.driver_id);
+      console.log(req.body);
       const newPassenger = new Passengers(
         _.pick(req.body, ['name', 'nickname'])
       );
