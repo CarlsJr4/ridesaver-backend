@@ -59,9 +59,11 @@ driverRouter
     try {
       const event = req.event;
       const driver = event.drivers.id(req.params.driver_id);
-      driver.name = 'Test1';
-      driver.nickname = 'Test2';
-      driver.seats = 3;
+      const { name, nickname, seats } = req.body;
+      // Each PUT request only updates 1 specific field at a time
+      name && (driver.name = name);
+      nickname && (driver.nickname = nickname);
+      seats && (driver.seats = seats);
       event.save();
       res.send(driver);
     } catch {
