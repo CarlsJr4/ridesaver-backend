@@ -84,7 +84,7 @@ driverRouter.put('/:driver_id/reorder', async (req, res) => {
   try {
     const event = req.event;
     const driver = event.drivers.id(req.params.driver_id);
-    driver.passengers = []; // Replace this with the new array to be sent
+    driver.passengers = req.body.sourcePassengers;
     event.save();
     res.send(event.drivers);
   } catch {
