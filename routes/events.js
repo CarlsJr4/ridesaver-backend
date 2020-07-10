@@ -6,7 +6,6 @@ const passengerRouter = require('./passengers');
 const { Events, Drivers } = require('../models/events');
 
 // TODO:
-// Sync front-end with backend
 // Config
 // Error handling
 // Cleanup
@@ -52,35 +51,33 @@ eventRouter
   });
 
 // Routes that require a specific event ID
-eventRouter
-  .route('/:event_id')
-  .get(async (req, res) => {
-    res.send(req.event);
-  })
-  // For changing event title and date/time
-  .patch(async (req, res) => {
-    try {
-      const event = await Events.findByIdAndUpdate(
-        req.params.id,
-        {
-          name: 'Ice Skating With Friends',
-        },
-        {
-          new: true,
-        }
-      );
-      res.send(event);
-    } catch {
-      console.log('error');
-    }
-  })
-  .delete(async (req, res) => {
-    try {
-      await Events.findByIdAndDelete(req.params.id);
-      res.send(await Events.find());
-    } catch {
-      console.log('err');
-    }
-  });
+eventRouter.route('/:event_id').get(async (req, res) => {
+  res.send(req.event);
+});
+// For changing event title and date/time
+// .patch(async (req, res) => {
+//   try {
+//     const event = await Events.findByIdAndUpdate(
+//       req.params.id,
+//       {
+//         name: 'Ice Skating With Friends',
+//       },
+//       {
+//         new: true,
+//       }
+//     );
+//     res.send(event);
+//   } catch {
+//     console.log('error');
+//   }
+// });
+// .delete(async (req, res) => {
+//   try {
+//     await Events.findByIdAndDelete(req.params.id);
+//     res.send(await Events.find());
+//   } catch {
+//     console.log('err');
+//   }
+// });
 
 module.exports = eventRouter;
