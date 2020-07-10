@@ -6,6 +6,9 @@ const _ = require('lodash');
 newPassengerRouter.post('/', async (req, res) => {
   const event = req.event;
   const newPassenger = new Passengers(_.pick(req.body, ['name', 'nickname']));
+  if (!req.body.nickname) {
+    newPassenger.nickname = null;
+  }
   const passengerPool = event.drivers.find(element => element.isPassengerPool);
   passengerPool.passengers.push(newPassenger);
   event.save();

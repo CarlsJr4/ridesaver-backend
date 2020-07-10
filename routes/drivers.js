@@ -42,7 +42,6 @@ driverRouter
     try {
       const event = req.event;
       const driver = event.drivers.id(req.params.driver_id);
-      console.log(req.body);
       const newPassenger = new Passengers(
         _.pick(req.body, ['name', 'nickname'])
       );
@@ -62,7 +61,7 @@ driverRouter
       const { name, nickname, seats } = req.body;
       // Each PUT request only updates 1 specific field at a time
       name && (driver.name = name);
-      nickname && (driver.nickname = nickname);
+      nickname ? (driver.nickname = nickname) : (driver.nickname = null);
       seats && (driver.seats = seats);
       event.save();
       res.send(driver);

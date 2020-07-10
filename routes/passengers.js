@@ -9,9 +9,10 @@ passengerRouter
       const event = req.event;
       const driver = event.drivers.id(req.params.driver_id);
       const passenger = driver.passengers.id(req.params.passenger_id);
+      console.log(req.body);
       const { name, nickname } = req.body;
       name && (passenger.name = name);
-      nickname && (passenger.nickname = nickname);
+      nickname ? (passenger.nickname = nickname) : (passenger.nickname = null);
       event.save();
       res.send(passenger);
     } catch {
