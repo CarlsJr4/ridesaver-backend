@@ -50,7 +50,7 @@ eventRouter
       const event = await newEvent.save();
       res.status(200).send(event);
     } catch (err) {
-      console.log(err);
+      res.status(503).send(err);
     }
   });
 
