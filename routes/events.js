@@ -33,21 +33,25 @@ eventRouter
     res.send(allEvents);
   })
   .post(async (req, res) => {
-    const newEvent = new Events({
-      name: 'Ice Skating With Friends',
-      author: 'Carl D.',
-      drivers: [],
-    });
-    // Default subdocument for the passenger pool
-    const passengerPool = new Drivers({
-      isPassengerPool: true,
-      name: 'pool',
-      nickname: 'pool',
-      seats: 1,
-    });
-    newEvent.drivers.push(passengerPool);
-    const event = await newEvent.save();
-    res.send(event);
+    try {
+      const newEvent = new Events({
+        name: 'Ice Skating With Friends',
+        author: 'Carl D.',
+        drivers: [],
+      });
+      // Default subdocument for the passenger pool
+      const passengerPool = new Drivers({
+        isPassengerPool: true,
+        name: 'pool',
+        nickname: 'pool',
+        seats: 1,
+      });
+      newEvent.drivers.push(passengerPool);
+      const event = await newEvent.save();
+      res.status(200).send(event);
+    } catch (err) {
+      console.log(err);
+    }
   });
 
 // Routes that require a specific event ID
