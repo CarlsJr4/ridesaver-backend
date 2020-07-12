@@ -10,10 +10,10 @@ const eventsRouter = require('./routes/events');
 require('dotenv').config();
 
 const port = process.env.PORT;
-const host = process.env.DB_HOST;
+const connectionString = process.env.db;
 
 // Database
-mongoose.connect(`mongodb://${host}/carpool-manager`, {
+mongoose.connect(connectionString, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
