@@ -6,6 +6,7 @@ const compression = require('compression');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const eventsRouter = require('./routes/events');
+const port = process.env.PORT;
 
 // Database
 mongoose.connect('mongodb://localhost/carpool-manager', {
@@ -33,4 +34,4 @@ app.get('/', function (req, res) {
 });
 
 // Need to listen for environment variable port OR fallback to port 3000
-app.listen(process.env.PORT || 3000);
+app.listen(port || 3000, () => console.log(`Listening on port ${port}`));
