@@ -6,10 +6,14 @@ const compression = require('compression');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const eventsRouter = require('./routes/events');
+
+require('dotenv').config();
+
 const port = process.env.PORT;
+const host = process.env.DB_HOST;
 
 // Database
-mongoose.connect('mongodb://localhost/carpool-manager', {
+mongoose.connect(`mongodb://${host}/carpool-manager`, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
