@@ -5,5 +5,5 @@ A RESTful API made to supplement my carpool manager app's frontend. Utilizes Exp
 
 Utilizes body-parser and cors NPM packages to receive form information from the frontend. 
 
-See [Mongoose models](https://github.com/CarlsJr4/carpool-manager-backend/blob/master/models/events.js) \
-See [Express routes](https://github.com/CarlsJr4/carpool-manager-backend/tree/master/routes)
+See [**Mongoose models**](https://github.com/CarlsJr4/carpool-manager-backend/blob/master/models/events.js) \
+See [**Express routes**](https://github.com/CarlsJr4/carpool-manager-backend/tree/master/routes)
