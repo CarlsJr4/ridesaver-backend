@@ -37,5 +37,10 @@ app.get('/', function (req, res) {
   res.send('Hello World');
 });
 
+// Keeps the app from going to sleep
+setInterval(() => {
+  app.get('https://ridesaver.onrender.com/api/events/5f0ba06021c06100174d698e');
+}, 25 * 60 * 1000); // Sends a ping every 25 minutes
+
 // Need to listen for environment variable port OR fallback to port 3000
 app.listen(port || 3000, () => console.log(`Listening on port ${port}`));
