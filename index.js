@@ -39,7 +39,13 @@ app.get('/', function (req, res) {
 
 // Keeps the app from going to sleep
 setInterval(() => {
-  app.get('https://ridesaver.onrender.com/api/events/5f0ba06021c06100174d698e');
+  const hour = new Date().getHours();
+  // Only sends a get request if between 9am and 9pm to save on uptime hours for render.com
+  if (hour >= 9 || hour < 21) {
+    app.get(
+      'https://ridesaver.onrender.com/api/events/5f0ba06021c06100174d698e'
+    );
+  }
 }, 25 * 60 * 1000); // Sends a ping every 25 minutes
 
 // Need to listen for environment variable port OR fallback to port 3000
