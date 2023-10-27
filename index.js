@@ -40,8 +40,8 @@ app.get('/', function (req, res) {
 // Keeps the app from going to sleep
 setInterval(() => {
   const hour = new Date().getHours();
-  // Only sends a get request if between 9am and 9pm to save on uptime hours for render.com
-  if (hour >= 9 || hour < 21) {
+  // Only sends a get request if between 10am and 8pm to save on uptime hours for render.com
+  if (hour >= 10 && hour < 20) {
     app.get(
       'https://ridesaver.onrender.com/api/events/5f0ba06021c06100174d698e'
     );
